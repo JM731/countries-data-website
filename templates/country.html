@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+{% block title %} {{ data['name']['common'] }} {% endblock %}
+{% block content %}
+<div class="container">
+    {% include 'header.html' %}
+    <div class="mb-4 text-center">
+        <h1>{{ data['name']['common'] }}</h1>
+        <p>Official Name: {{ data['name']['official'] }}</p>
+        <p><a class="btn btn-outline-dark btn-sm" data-bs-toggle="collapse" href="#nativeNamesCollapse" role="button"
+              aria-expanded="false" aria-controls="nativeNamesCollapse">
+            Native Names
+        </a></p>
+        <div class="collapse" id="nativeNamesCollapse">
+            {{ macros.display_native_names(data['name']['nativeName']) }}
+        </div>
+    </div>
+    <p class="fs-4 text-center">Basic Information</p>
+    <hr>
+    <div class="row text-center mt-2 align-items-top">
+        <div class="col-sm">
+            <img class="img-thumbnail" style="max-height: 150px; width: auto;" src="{{ data['flags']['png'] }}"
+                 alt="{{ data['flags']['alt'] }}">
+            <p>Flag</p>
+            {% if data['coatOfArms']|length > 0 %}
+            <img class="img-thumbnail" style="max-height: 150px; width: auto;" src="{{ data['coatOfArms']['png'] }}">
+            <p>Coat of Arms</p>
+            {% endif %}
+        </div>
+        <div class="col-sm border-start text-start">
+            <p>{{ macros.semibold('Country Codes') }}</p>
+            <ul>
+                <li>CCA2: {{ data['cca2'] }}</li>
+                <li>CCN3: {{ data['ccn3'] }}</li>
+                <li>CCA3: {{ data['cca3'] }}</li>
+                <li>CIOC: {{ data['cioc'] }}</li>
+            </ul>
+            <p>{{ macros.semibold('Region') }}: {{ data['region'] }} (Subregion: {{ data['subregion'] }})</p>
+            <p>{{ macros.semibold('Continents') }}: {{ macros.display_list(data['continents']) }}</p>
+            <p>{{ macros.semibold('Capital') }}: {{ macros.display_list(data['capital']) }}</p>
+            <p>{{ macros.semibold('Population') }}: {{ data['population'] }}</p>
+            <p>{{ macros.semibold('Area') }}: {{ data['area'] }} km²</p>
+        </div>
+        <div class="col-sm border-start text-start">
+            <p>{{ macros.semibold('Languages') }}: {{ macros.display_dict(data['languages']) }}</p>
+            <p>{{ macros.semibold('Currencies') }}: {{ macros.display_currencies(data['currencies']) }}</p>
+            <p>{{ macros.semibold('Demonym') }}: {{ macros.display_demonyms(data['demonyms']['eng']) }}</p>
+            <p>{{ macros.semibold('Landlocked') }}: {{ macros.display_bool(data['landlocked']) }}</p>
+            <p>{{ macros.semibold('Borders') }}: {{ macros.display_list(data['borders']) }}</p>
+            <p>{{ macros.semibold('Independent') }}: {{ macros.display_bool(data['independent']) }} </p>
+            <p>{{ macros.semibold('UN Member') }}: {{ macros.display_bool(data['unMember']) }}</p>
+            <p>{{ macros.semibold('Time Zones') }}: {{ macros.display_list(data['timezones']) }}</p>
+        </div>
+    </div>
+    <p class="fs-4 text-center">Misc Information</p>
+    <hr>
+    <div class="row align-items-top text-start mt-2">
+        <div class="col-sm">
+            <p>{{ macros.semibold('Coordinates') }}</p>
+            {{ macros.display_coords(data['latlng']) }}
+            {% if data['capitalInfo']|length > 0 %}
+            <p>{{ macros.semibold('Capital Coordinates') }}</p>
+            {{ macros.display_coords(data['capitalInfo']['latlng']) }}
+            {% endif %}
+        </div>
+        <div class="col-sm border-start">
+            <p class="text-break">{{ macros.semibold('Map Link') }}: <a href="{{ data['maps']['googleMaps'] }}">{{
+                data['maps']['googleMaps'] }}</a></p>
+            <p>{{ macros.semibold('Internet TLD')}}: {{ data['tld'][0] }}</p>
+            <p>{{ macros.semibold('IDD') }}</p>
+            <ul>
+                <li>Root: {{ data['idd']['root'] }}</li>
+                {% if data['idd']['suffixes']|length > 30 %}
+                <li><a class="link-dark" data-bs-toggle="collapse" href="#suffixesCollapse"
+                       role="button"
+                       aria-expanded="false" aria-controls="suffixesCollapse">
+                    Suffixes
+                </a>
+                    <div class="collapse" id="suffixesCollapse">
+                        {{ macros.display_list(data['idd']['suffixes']) }}
+                    </div>
+                </li>
+                {% else %}
+                <li>Suffixes: {{ macros.display_list(data['idd']['suffixes']) }}</li>
+                {% endif %}
+            </ul>
+            {% if 'postalCode' in data %}
+            <p>{{ macros.semibold('Postal Code Format') }}: {{ data['postalCode']['format'] }}</p>
+            {% endif %}
+        </div>
+        <div class="col-sm border-start">
+            <p>{{ macros.semibold('Start of the Week') }}: {{ data['startOfWeek'] }}</p>
+            <p>{{ macros.semibold('Driving side') }}: {{ data['car']['side'] }}</p>
+            <p>{{ macros.semibold('Car signs') }}: {{ macros.display_list(data['car']['signs']) }}</p>
+            <p>{{ macros.semibold('Gini coefficient') }}: {{ macros.display_gini(data['gini']) }}</p>
+            <p>{{ macros.semibold('FIFA Trigraph')}}: {{ data['fifa'] }}</p>
+        </div>
+    </div>
+    <div class="row align-items-center justify-content-center">
+        <div class="col-8 table-responsive">
+            <table class="table table-sm caption-top text-center">
+                <caption>Translation Names</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Language</th>
+                    <th scope="col">Common Name</th>
+                    <th scope="col">Official Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for lang in data['translations'] %}
+                <tr>
+                    <td>{{ lang|upper }}</td>
+                    <td>{{ data['translations'][lang]['common'] }}</td>
+                    <td>{{ data['translations'][lang]['official'] }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

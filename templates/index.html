@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+{% block title %} Countries Data {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col">
+            <h1 class="text-center mb-5">Countries Data</h1>
+			{{ macros.render_search_bar(form, 'home') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

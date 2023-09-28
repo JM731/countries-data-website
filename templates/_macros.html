@@ -1,0 +1,75 @@
+{% macro render_search_bar(form, route) %}
+<form method="POST" action="{{ url_for(route) }}" novalidate>
+    {{ form.csrf_token() }}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 mb-2">
+                {{ form.search_term(class_="form-control") }}
+            </div>
+            <div class="col-md-3 col-sm-4 mb-2">
+                {{ form.category(class_="form-select") }}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {{ form.submit(class_="btn btn-primary w-100") }}
+            </div>
+        </div>
+    </div>
+</form>
+{% endmacro %}
+
+{% macro display_list(list) %}
+{% for item in list %}
+{{ item }}{% if loop.index0 < (list|length) - 1 %}, {% endif %}
+{% endfor %}
+{% if list|length == 0 or (list|length == 1 and list[0] == "")%}
+None
+{% endif %}
+{% endmacro %}
+
+{% macro display_dict(dictionary) %}
+{% for key in dictionary %}
+{{ dictionary[key] }}{% if loop.index0 < (dictionary|length) - 1 %}, {% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro display_currencies(currencies) %}
+{% for currency in currencies %}
+{{ currencies[currency]['name'] }} ({{ currencies[currency]['symbol'] }}){% if loop.index0 < (currencies|length) - 1 %}, {% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro display_bool(bool_var) %}
+{% if bool_var %} Yes {% else %} No {% endif %}
+{% endmacro %}
+
+{% macro display_demonyms(demonyms) %}
+{% if demonyms['m'] == demonyms['f'] %}
+{{ demonyms['m'] }} (m, f)
+{% else %}
+{{ demonyms['m'] }} (m), {{ demonyms['f'] }} (f)
+{% endif %}
+{% endmacro %}
+
+{% macro display_native_names(native_names) %}
+{% for key in native_names %}
+<p class="fs-6 my-0"><span class="fw-semibold">{{ key|upper }}</span>: {{ native_names[key]['common'] }} ({{
+    native_names[key]['official'] }})</p>
+{% endfor %}
+{% endmacro %}
+
+{% macro semibold(text) -%}
+<span class="fw-semibold">{{ text }}</span>
+{%- endmacro %}
+
+{% macro display_coords(coords) %}
+<ul>
+    <li>Latitude: {{ coords[0]|abs }}º {% if coords[0] >= 0 %}N{% else %}S{% endif %}</li>
+    <li>Longitude: {{ coords[1]|abs }}º {% if coords[1] >= 0 %}E{% else %}W{% endif %}</li>
+</ul>
+{% endmacro %}
+
+{% macro display_gini(gini_dict) %}
+    {% for gini in gini_dict %}
+        {{gini_dict[gini]}} ({{ gini }}){% if loop.index0 < (gini_dict|length) - 1 %}, {% endif %}
+    {% endfor %}
+{% endmacro %}

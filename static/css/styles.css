@@ -1,0 +1,7 @@
+.custom-table td {
+    height: 100px;
+}
+
+.custom-table tr td:nth-child(1) {
+        width: 150px;
+}
